@@ -23,9 +23,9 @@ export default class Card extends Component {
           <p data-testid="description-card">{ cardDescription }</p>
         </div>
         <div>
-          <p data-testid="attr1-card">{ cardAttr1 }</p>
-          <p data-testid="attr2-card">{ cardAttr2 }</p>
-          <p data-testid="attr3-card">{ cardAttr3 }</p>
+          <p data-testid="attr1-card">{ `Força Física: ${cardAttr1}` }</p>
+          <p data-testid="attr2-card">{ `Velocidade: ${cardAttr2}` }</p>
+          <p data-testid="attr3-card">{ `Força Mágica: ${cardAttr3}` }</p>
         </div>
         <span data-testid="rare-card">{ cardRare }</span>
         { cardTrunfo && <p data-testid="trunfo-card">Super Trunfo</p> }
