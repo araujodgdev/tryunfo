@@ -1,0 +1,21 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 45%;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+}
+.save-button {
+  width: 35%;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+}
