@@ -7,5 +7,7 @@
 }
 
 .card-image {
-  height: 200px;
+  display: block;
+  margin: auto auto;
+  width: 80%;
 }

@@ -15,7 +15,7 @@ class App extends React.Component {
       cardAttr3: '',
       cardImage: '',
       cardRare: 'normal',
-      cardTrunfo: '',
+      cardTrunfo: false,
       inSaveButtonDisabled: '',
       hasTrunfo: false,
       savedCards: [],
@@ -114,6 +114,7 @@ class App extends React.Component {
 
   render() {
     const { onInputChange, onSaveButtonClick } = this;
+    const { savedCards } = this.state;
     return (
       <div className="main-container">
         <h1 className="title">Tryunfo</h1>
@@ -125,6 +126,10 @@ class App extends React.Component {
             { ...this.state }
           />
           <Card { ...this.state } />
+        </div>
+        <div className="saved-cards">
+          <h2>Cartas Salvas</h2>
+          {savedCards.map((card) => <Card key={ card.cardName } { ...card } />)}
         </div>
       </div>
     );

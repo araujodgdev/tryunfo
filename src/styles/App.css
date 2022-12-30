@@ -19,3 +19,17 @@
   font-size: 40px;
   margin-bottom: 0;
 }
+
+.saved-cards {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+}
+
+.saved-cards .card-container {
+  width: 30%;
+}
+
+.saved-cards h2 {
+  margin: auto auto;
+}
