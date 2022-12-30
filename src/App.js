@@ -17,9 +17,11 @@ class App extends React.Component {
       cardRare: 'normal',
       cardTrunfo: '',
       inSaveButtonDisabled: '',
+      savedCards: [],
     };
     this.onInputChange = this.onInputChange.bind(this);
     this.validateSaveButton = this.validateSaveButton.bind(this);
+    this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
   }
 
   onInputChange({ target }) {
@@ -27,6 +29,43 @@ class App extends React.Component {
     this.setState({
       [name]: name === 'cardTrunfo' ? target.checked : value,
     }, this.validateSaveButton);
+  }
+
+  onSaveButtonClick(e) {
+    e.preventDefault();
+    const { cardName,
+      cardDescription,
+      cardAttr1,
+      cardAttr2,
+      cardAttr3,
+      cardImage,
+      cardRare,
+      cardTrunfo,
+    } = this.state;
+    const newCard = { cardName,
+      cardDescription,
+      cardAttr1,
+      cardAttr2,
+      cardAttr3,
+      cardImage,
+      cardRare,
+      cardTrunfo };
+
+    this.setState((prevState) => (
+      {
+        savedCards: [...prevState.savedCards, newCard],
+      }
+    ));
+    this.setState({
+      cardName: '',
+      cardDescription: '',
+      cardAttr1: '0',
+      cardAttr2: '0',
+      cardAttr3: '0',
+      cardImage: '',
+      cardRare: 'normal',
+      isSaveButtonDisabled: true,
+    });
   }
 
   validateSaveButton() {
@@ -66,13 +105,17 @@ class App extends React.Component {
   }
 
   render() {
-    const { onInputChange } = this;
+    const { onInputChange, onSaveButtonClick } = this;
     return (
       <div className="main-container">
         <h1 className="title">Tryunfo</h1>
         <p>{'The Mystical Creatures\'s Edition'}</p>
         <div className="new-card-container">
-          <Form onInputChange={ onInputChange } { ...this.state } />
+          <Form
+            onInputChange={ onInputChange }
+            onSaveButtonClick={ onSaveButtonClick }
+            { ...this.state }
+          />
           <Card { ...this.state } />
         </div>
       </div>
