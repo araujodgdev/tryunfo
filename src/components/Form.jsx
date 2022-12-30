@@ -4,7 +4,8 @@ import { string, bool, func } from 'prop-types';
 
 export default class Form extends Component {
   render() {
-    const { cardName,
+    const {
+      cardName,
       cardDescription,
       cardAttr1,
       cardAttr2,
@@ -15,9 +16,10 @@ export default class Form extends Component {
       hasTrunfo,
       isSaveButtonDisabled,
       onInputChange,
-      onSaveButtonClick } = this.props;
+      onSaveButtonClick,
+    } = this.props;
     return (
-      <form className="form" onSubmit={ () => {} }>
+      <form className="form" onSubmit={() => {}}>
         <span>ADICIONE UMA NOVA CARTA</span>
         <div className="flex general-info">
           <label className="flex" htmlFor="cardName">
@@ -26,8 +28,8 @@ export default class Form extends Component {
               data-testid="name-input"
               type="text"
               name="cardName"
-              value={ cardName }
-              onChange={ onInputChange }
+              value={cardName}
+              onChange={onInputChange}
             />
           </label>
           <label className="flex" htmlFor="cardDescription">
@@ -37,8 +39,8 @@ export default class Form extends Component {
               data-testid="description-input"
               cols="30"
               rows="10"
-              value={ cardDescription }
-              onChange={ onInputChange }
+              value={cardDescription}
+              onChange={onInputChange}
             />
           </label>
         </div>
@@ -50,8 +52,8 @@ export default class Form extends Component {
               type="number"
               name="cardAttr1"
               data-testid="attr1-input"
-              value={ cardAttr1 }
-              onChange={ onInputChange }
+              value={cardAttr1}
+              onChange={onInputChange}
             />
           </label>
           <label htmlFor="cardAttr2">
@@ -61,8 +63,8 @@ export default class Form extends Component {
               min="0"
               name="cardAttr2"
               data-testid="attr2-input"
-              value={ cardAttr2 }
-              onChange={ onInputChange }
+              value={cardAttr2}
+              onChange={onInputChange}
             />
           </label>
           <label htmlFor="cardAttr3">
@@ -72,8 +74,8 @@ export default class Form extends Component {
               min="0"
               name="cardAttr3"
               data-testid="attr3-input"
-              value={ cardAttr3 }
-              onChange={ onInputChange }
+              value={cardAttr3}
+              onChange={onInputChange}
             />
           </label>
         </div>
@@ -84,16 +86,16 @@ export default class Form extends Component {
               type="text"
               name="cardImage"
               data-testid="image-input"
-              value={ cardImage }
-              onChange={ onInputChange }
+              value={cardImage}
+              onChange={onInputChange}
             />
           </label>
           <label htmlFor="cardRare">
             Raridade
             <select
               name="cardRare"
-              onChange={ onInputChange }
-              value={ cardRare }
+              onChange={onInputChange}
+              value={cardRare}
               data-testid="rare-input"
             >
               <option value="normal">Normal</option>
@@ -103,20 +105,24 @@ export default class Form extends Component {
           </label>
         </div>
         <div className="form-footer">
-          <label htmlFor="cardTrunfo">
-            <input
-              type="checkbox"
-              data-testid="trunfo-input"
-              name="cardTrunfo"
-              value={ cardTrunfo }
-              onChange={ onInputChange }
-              defaultChecked={ false }
-            />
-            Super Trunfo
-          </label>
+          {hasTrunfo ? (
+            'Você já tem um Super Trunfo em seu baralho.'
+          ) : (
+            <label htmlFor="cardTrunfo">
+              <input
+                type="checkbox"
+                data-testid="trunfo-input"
+                name="cardTrunfo"
+                value={cardTrunfo}
+                onChange={onInputChange}
+                defaultChecked={false}
+              />
+              Super Trunfo
+            </label>
+          )}
           <button
-            onClick={ onSaveButtonClick }
-            disabled={ isSaveButtonDisabled }
+            onClick={onSaveButtonClick}
+            disabled={isSaveButtonDisabled}
             className="save-button"
             type="button"
             data-testid="save-button"

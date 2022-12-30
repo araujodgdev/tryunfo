@@ -17,6 +17,7 @@ class App extends React.Component {
       cardRare: 'normal',
       cardTrunfo: '',
       inSaveButtonDisabled: '',
+      hasTrunfo: false,
       savedCards: [],
     };
     this.onInputChange = this.onInputChange.bind(this);
@@ -56,6 +57,7 @@ class App extends React.Component {
         savedCards: [...prevState.savedCards, newCard],
       }
     ));
+
     this.setState({
       cardName: '',
       cardDescription: '',
@@ -66,6 +68,12 @@ class App extends React.Component {
       cardRare: 'normal',
       isSaveButtonDisabled: true,
     });
+
+    if (cardTrunfo) {
+      this.setState({
+        hasTrunfo: true,
+      });
+    }
   }
 
   validateSaveButton() {
