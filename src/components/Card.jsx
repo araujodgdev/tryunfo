@@ -32,7 +32,7 @@ export default class Card extends Component {
           <p data-testid="attr2-card">{ `Velocidade: ${cardAttr2}` }</p>
           <p data-testid="attr3-card">{ `Força Mágica: ${cardAttr3}` }</p>
         </div>
-        <span data-testid="rare-card">{ cardRare.toUpperCase() }</span>
+        <span data-testid="rare-card">{ cardRare }</span>
         { cardTrunfo && <p data-testid="trunfo-card">Super Trunfo</p> }
       </div>
     );

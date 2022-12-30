@@ -115,7 +115,7 @@ export default class Form extends Component {
                 name="cardTrunfo"
                 value={ cardTrunfo }
                 onChange={ onInputChange }
-                defaultChecked={ false }
+                checked={ cardTrunfo }
               />
               Super Trunfo
             </label>
@@ -152,5 +152,5 @@ Form.propTypes = {
 
 Form.defaultProps = {
   isSaveButtonDisabled: true,
-  cardTrunfo: false,
+  cardTrunfo: true,
 };
