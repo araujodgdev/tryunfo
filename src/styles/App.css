@@ -3,10 +3,10 @@
   border-radius: 20px;
   display: flex;
   height: 100%;
-  width: 75%;
   justify-content: space-between;
-  padding: 40px;
   margin-bottom: 20px;
+  padding: 40px;
+  width: 75%;
 }
 
 .main-container {
