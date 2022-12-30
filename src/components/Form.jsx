@@ -139,7 +139,11 @@ Form.propTypes = {
   cardRare: string.isRequired,
   cardTrunfo: bool.isRequired,
   hasTrunfo: bool.isRequired,
-  isSaveButtonDisabled: bool.isRequired,
+  isSaveButtonDisabled: bool,
   onInputChange: func.isRequired,
   onSaveButtonClick: func.isRequired,
+};
+
+Form.defaultProps = {
+  isSaveButtonDisabled: true,
 };

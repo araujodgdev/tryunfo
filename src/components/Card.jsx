@@ -19,7 +19,12 @@ export default class Card extends Component {
         <span>PRÉ-VISUALIZAÇÃO</span>
         <div>
           <h3 data-testid="name-card">{ cardName }</h3>
-          <img data-testid="image-card" src={ cardImage } alt={ cardName } />
+          <img
+            className="card-image"
+            data-testid="image-card"
+            src={ cardImage }
+            alt={ cardName }
+          />
           <p data-testid="description-card">{ cardDescription }</p>
         </div>
         <div>
@@ -27,7 +32,7 @@ export default class Card extends Component {
           <p data-testid="attr2-card">{ `Velocidade: ${cardAttr2}` }</p>
           <p data-testid="attr3-card">{ `Força Mágica: ${cardAttr3}` }</p>
         </div>
-        <span data-testid="rare-card">{ cardRare }</span>
+        <span data-testid="rare-card">{ cardRare.toUpperCase() }</span>
         { cardTrunfo && <p data-testid="trunfo-card">Super Trunfo</p> }
       </div>
     );
