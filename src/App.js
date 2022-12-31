@@ -16,13 +16,26 @@ class App extends React.Component {
       cardImage: '',
       cardRare: 'normal',
       cardTrunfo: false,
-      inSaveButtonDisabled: '',
+      isSaveButtonDisabled: true,
       hasTrunfo: false,
       savedCards: [],
     };
     this.onInputChange = this.onInputChange.bind(this);
     this.validateSaveButton = this.validateSaveButton.bind(this);
     this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
+    this.onDeleteButtonClick = this.onDeleteButtonClick.bind(this);
+    this.handleHasTrunfo = this.handleHasTrunfo.bind(this);
+    this.verifyHasTrunfo = this.verifyHasTrunfo.bind(this);
+  }
+
+  handleHasTrunfo() {
+    const { savedCards } = this.state;
+    const output = savedCards.some((card) => card.cardTrunfo === true);
+    if (output === false) {
+      this.setState({
+        hasTrunfo: false,
+      });
+    }
   }
 
   onInputChange({ target }) {
@@ -50,13 +63,14 @@ class App extends React.Component {
       cardAttr3,
       cardImage,
       cardRare,
-      cardTrunfo };
+      cardTrunfo: cardTrunfo ? true : cardTrunfo,
+    };
 
     this.setState((prevState) => (
       {
         savedCards: [...prevState.savedCards, newCard],
       }
-    ));
+    ), this.verifyHasTrunfo);
 
     this.setState({
       cardName: '',
@@ -66,10 +80,24 @@ class App extends React.Component {
       cardAttr3: '0',
       cardImage: '',
       cardRare: 'normal',
+      cardTrunfo: false,
       isSaveButtonDisabled: true,
     });
+  }
 
-    if (cardTrunfo) {
+  onDeleteButtonClick({ target }) {
+    const { savedCards } = this.state;
+    const { id } = target;
+    const updatedSavedCards = savedCards.filter((card) => card.cardName !== id);
+    this.setState({
+      savedCards: updatedSavedCards,
+    }, this.handleHasTrunfo);
+  }
+
+  verifyHasTrunfo() {
+    const { savedCards } = this.state;
+    const verifyHasTrunfo = savedCards.some((card) => card.cardTrunfo === true);
+    if (verifyHasTrunfo === true) {
       this.setState({
         hasTrunfo: true,
       });
@@ -113,7 +141,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { onInputChange, onSaveButtonClick } = this;
+    const { onInputChange, onSaveButtonClick, onDeleteButtonClick } = this;
     const { savedCards } = this.state;
     return (
       <div className="main-container">
@@ -128,8 +156,13 @@ class App extends React.Component {
           <Card { ...this.state } />
         </div>
         <div className="saved-cards">
-          <h2>Cartas Salvas</h2>
-          {savedCards.map((card) => <Card key={ card.cardName } { ...card } />)}
+          {savedCards.map((card) => (
+            <Card
+              isSavedCard="true"
+              onDeleteButtonClick={ onDeleteButtonClick }
+              key={ card.cardName }
+              { ...card }
+            />))}
         </div>
       </div>
     );
