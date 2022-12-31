@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from './components/Card';
+import FilterFields from './components/FilterFields';
 import Form from './components/Form';
 import './styles/App.css';
 
@@ -19,7 +20,8 @@ class App extends React.Component {
       isSaveButtonDisabled: true,
       hasTrunfo: false,
       savedCards: [],
-      filteredCard: undefined,
+      filteredCards: undefined,
+      nameFilter: '',
     };
     this.onInputChange = this.onInputChange.bind(this);
     this.validateSaveButton = this.validateSaveButton.bind(this);
@@ -27,7 +29,7 @@ class App extends React.Component {
     this.onDeleteButtonClick = this.onDeleteButtonClick.bind(this);
     this.handleHasTrunfo = this.handleHasTrunfo.bind(this);
     this.verifyHasTrunfo = this.verifyHasTrunfo.bind(this);
-    this.handleFilterName = this.handleFilterName.bind(this);
+    this.fetchFilteredCards = this.fetchFilteredCards.bind(this);
   }
 
   handleHasTrunfo() {
@@ -40,23 +42,15 @@ class App extends React.Component {
     }
   }
 
-  handleFilterName(e) {
-    const { value } = e.target;
-    const { savedCards } = this.state;
-    const filtered = savedCards.filter((card) => (
-      card.cardName.toLowerCase().includes(value.toLowerCase())));
-    this.setState({
-      filteredCard: filtered === undefined ? '' : filtered,
-    });
-  }
-
   onInputChange({ target }) {
     const { value, name } = target;
     this.setState(
       {
         [name]: name === 'cardTrunfo' ? target.checked : value,
       },
-      this.validateSaveButton,
+      () => {
+        this.validateSaveButton();
+      },
     );
   }
 
@@ -111,8 +105,29 @@ class App extends React.Component {
       {
         savedCards: updatedSavedCards,
       },
-      this.handleHasTrunfo,
+      () => {
+        this.handleHasTrunfo();
+        this.fetchFilteredCards();
+      },
     );
+  }
+
+  setFilterState = ({ target }) => {
+    const { value, name } = target;
+    if (name === 'nameFilter') {
+      this.setState({
+        [name]: value,
+      }, this.fetchFilteredCards);
+    }
+  };
+
+  fetchFilteredCards() {
+    const { nameFilter, savedCards } = this.state;
+    const filtered = savedCards.filter((card) => (
+      card.cardName.toLowerCase().includes(nameFilter.toLowerCase())));
+    this.setState({
+      filteredCards: filtered === undefined ? '' : filtered,
+    });
   }
 
   verifyHasTrunfo() {
@@ -168,9 +183,9 @@ class App extends React.Component {
       onInputChange,
       onSaveButtonClick,
       onDeleteButtonClick,
-      handleFilterName,
+      fetchFilteredCards,
     } = this;
-    const { savedCards, filteredCard } = this.state;
+    const { savedCards, filteredCards } = this.state;
     const savedCardsList = (list) => {
       const output = list.map((card) => (
         <Card
@@ -194,20 +209,13 @@ class App extends React.Component {
           />
           <Card { ...this.state } />
         </div>
+        <FilterFields
+          fetchFilteredCards={ fetchFilteredCards }
+          onInputChange={ this.setFilterState }
+        />
         <div className="saved-cards">
-          <div className="filter-container">
-            <span>Filtros de Busca</span>
-            <label htmlFor="filter-name">
-              <input
-                data-testid="name-filter"
-                placeholder="Nome da carta"
-                type="text"
-                onChange={ handleFilterName }
-              />
-            </label>
-          </div>
-          {filteredCard === undefined
-            ? savedCardsList(savedCards) : savedCardsList(filteredCard)}
+          {filteredCards === undefined
+            ? savedCardsList(savedCards) : savedCardsList(filteredCards)}
         </div>
       </div>
     );
