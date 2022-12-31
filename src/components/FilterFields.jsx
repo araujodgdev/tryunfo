@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { func } from 'prop-types';
+import { func, bool } from 'prop-types';
 
 export default class FilterFields extends Component {
   render() {
-    const { onInputChange } = this.props;
+    const { onInputChange, handleTrunfoFilter, disabledFilter } = this.props;
     return (
       <div className="filter-container">
         <span>Filtros de Busca</span>
@@ -14,10 +14,12 @@ export default class FilterFields extends Component {
             placeholder="Nome da carta"
             type="text"
             onChange={ onInputChange }
+            disabled={ disabledFilter }
           />
         </label>
         <label htmlFor="rareFilter">
           <select
+            disabled={ disabledFilter }
             onChange={ onInputChange }
             data-testid="rare-filter"
             name="rareFilter"
@@ -29,6 +31,15 @@ export default class FilterFields extends Component {
             <option value="muito raro">muito raro</option>
           </select>
         </label>
+        <label htmlFor="trunfoFilter">
+          <input
+            type="checkbox"
+            name="trunfoFilter"
+            data-testid="trunfo-filter"
+            onChange={ handleTrunfoFilter }
+          />
+          Super Trunfo
+        </label>
       </div>
     );
   }
@@ -36,4 +47,6 @@ export default class FilterFields extends Component {
 
 FilterFields.propTypes = {
   onInputChange: func.isRequired,
+  handleTrunfoFilter: func.isRequired,
+  disabledFilter: bool.isRequired,
 };

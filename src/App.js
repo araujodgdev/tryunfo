@@ -5,35 +5,37 @@ import Form from './components/Form';
 import './styles/App.css';
 
 class App extends React.Component {
-  constructor() {
-    super();
+  state = {
+    cardName: '',
+    cardDescription: '',
+    cardAttr1: '',
+    cardAttr2: '',
+    cardAttr3: '',
+    cardImage: '',
+    cardRare: 'normal',
+    cardTrunfo: false,
+    isSaveButtonDisabled: true,
+    hasTrunfo: false,
+    savedCards: [],
+    filteredCards: undefined,
+    nameFilter: '',
+    rareFilter: '',
+    disabledFilter: false,
+  };
 
-    this.state = {
-      cardName: '',
-      cardDescription: '',
-      cardAttr1: '',
-      cardAttr2: '',
-      cardAttr3: '',
-      cardImage: '',
-      cardRare: 'normal',
-      cardTrunfo: false,
-      isSaveButtonDisabled: true,
-      hasTrunfo: false,
-      savedCards: [],
-      filteredCards: undefined,
-      nameFilter: '',
-      rareFilter: '',
-    };
-    this.onInputChange = this.onInputChange.bind(this);
-    this.validateSaveButton = this.validateSaveButton.bind(this);
-    this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
-    this.onDeleteButtonClick = this.onDeleteButtonClick.bind(this);
-    this.handleHasTrunfo = this.handleHasTrunfo.bind(this);
-    this.verifyHasTrunfo = this.verifyHasTrunfo.bind(this);
-    this.fetchFilteredCards = this.fetchFilteredCards.bind(this);
-  }
+  handleTrunfoFilter = (e) => {
+    const { checked } = e.target;
+    const { savedCards } = this.state;
+    if (checked === true) {
+      const filtered = savedCards.find((card) => card.cardTrunfo === true);
+      this.setState({ filteredCards: [filtered], disabledFilter: true });
+    }
+    if (checked === false) {
+      this.setState({ filteredCards: undefined, disabledFilter: false });
+    }
+  };
 
-  handleHasTrunfo() {
+  handleHasTrunfo = () => {
     const { savedCards } = this.state;
     const output = savedCards.some((card) => card.cardTrunfo === true);
     if (output === false) {
@@ -41,9 +43,9 @@ class App extends React.Component {
         hasTrunfo: false,
       });
     }
-  }
+  };
 
-  onInputChange({ target }) {
+  onInputChange = ({ target }) => {
     const { value, name } = target;
     this.setState(
       {
@@ -53,9 +55,9 @@ class App extends React.Component {
         this.validateSaveButton();
       },
     );
-  }
+  };
 
-  onSaveButtonClick(e) {
+  onSaveButtonClick = (e) => {
     e.preventDefault();
     const {
       cardName,
@@ -96,9 +98,9 @@ class App extends React.Component {
       cardTrunfo: false,
       isSaveButtonDisabled: true,
     });
-  }
+  };
 
-  onDeleteButtonClick({ target }) {
+  onDeleteButtonClick = ({ target }) => {
     const { savedCards } = this.state;
     const { id } = target;
     const updatedSavedCards = savedCards.filter((card) => card.cardName !== id);
@@ -111,7 +113,7 @@ class App extends React.Component {
         this.fetchFilteredCards();
       },
     );
-  }
+  };
 
   setFilterState = ({ target }) => {
     const { value, name } = target;
@@ -127,7 +129,7 @@ class App extends React.Component {
     }
   };
 
-  fetchFilteredCards() {
+  fetchFilteredCards = () => {
     const { nameFilter, savedCards, rareFilter } = this.state;
     if (rareFilter === '') {
       const filtered = savedCards.filter((card) => (
@@ -147,9 +149,9 @@ class App extends React.Component {
         filteredCards: filtered === undefined ? '' : filtered,
       });
     }
-  }
+  };
 
-  verifyHasTrunfo() {
+  verifyHasTrunfo = () => {
     const { savedCards } = this.state;
     const verifyHasTrunfo = savedCards.some((card) => card.cardTrunfo === true);
     if (verifyHasTrunfo === true) {
@@ -157,9 +159,9 @@ class App extends React.Component {
         hasTrunfo: true,
       });
     }
-  }
+  };
 
-  validateSaveButton() {
+  validateSaveButton = () => {
     const {
       cardName,
       cardDescription,
@@ -195,7 +197,7 @@ class App extends React.Component {
         (value) => value === true,
       ),
     });
-  }
+  };
 
   render() {
     const {
@@ -203,8 +205,9 @@ class App extends React.Component {
       onSaveButtonClick,
       onDeleteButtonClick,
       fetchFilteredCards,
+      handleTrunfoFilter,
     } = this;
-    const { savedCards, filteredCards } = this.state;
+    const { savedCards, filteredCards, disabledFilter } = this.state;
     const savedCardsList = (list) => {
       const output = list.map((card) => (
         <Card
@@ -231,6 +234,8 @@ class App extends React.Component {
         <FilterFields
           fetchFilteredCards={ fetchFilteredCards }
           onInputChange={ this.setFilterState }
+          handleTrunfoFilter={ handleTrunfoFilter }
+          disabledFilter={ disabledFilter }
         />
         <div className="saved-cards">
           {filteredCards === undefined
