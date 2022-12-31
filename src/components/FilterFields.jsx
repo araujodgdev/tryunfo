@@ -16,6 +16,19 @@ export default class FilterFields extends Component {
             onChange={ onInputChange }
           />
         </label>
+        <label htmlFor="rareFilter">
+          <select
+            onChange={ onInputChange }
+            data-testid="rare-filter"
+            name="rareFilter"
+            id="rareFilter"
+          >
+            <option value="">todas</option>
+            <option value="normal">normal</option>
+            <option value="raro">raro</option>
+            <option value="muito raro">muito raro</option>
+          </select>
+        </label>
       </div>
     );
   }

@@ -22,6 +22,7 @@ class App extends React.Component {
       savedCards: [],
       filteredCards: undefined,
       nameFilter: '',
+      rareFilter: '',
     };
     this.onInputChange = this.onInputChange.bind(this);
     this.validateSaveButton = this.validateSaveButton.bind(this);
@@ -119,15 +120,33 @@ class App extends React.Component {
         [name]: value,
       }, this.fetchFilteredCards);
     }
+    if (name === 'rareFilter') {
+      this.setState({
+        [name]: value,
+      }, this.fetchFilteredCards);
+    }
   };
 
   fetchFilteredCards() {
-    const { nameFilter, savedCards } = this.state;
-    const filtered = savedCards.filter((card) => (
-      card.cardName.toLowerCase().includes(nameFilter.toLowerCase())));
-    this.setState({
-      filteredCards: filtered === undefined ? '' : filtered,
-    });
+    const { nameFilter, savedCards, rareFilter } = this.state;
+    if (rareFilter === '') {
+      const filtered = savedCards.filter((card) => (
+        card.cardName.toLowerCase().includes(nameFilter.toLowerCase())
+         && card.cardRare.includes(rareFilter)
+      ));
+      this.setState({
+        filteredCards: filtered === undefined ? '' : filtered,
+      });
+    }
+    if (rareFilter !== '') {
+      const filtered = savedCards.filter((card) => (
+        card.cardName.toLowerCase().includes(nameFilter.toLowerCase())
+         && card.cardRare === rareFilter
+      ));
+      this.setState({
+        filteredCards: filtered === undefined ? '' : filtered,
+      });
+    }
   }
 
   verifyHasTrunfo() {
