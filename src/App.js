@@ -43,7 +43,8 @@ class App extends React.Component {
   handleFilterName(e) {
     const { value } = e.target;
     const { savedCards } = this.state;
-    const filtered = savedCards.filter((card) => card.cardName.includes(value));
+    const filtered = savedCards.filter((card) => (
+      card.cardName.toLowerCase().includes(value.toLowerCase())));
     this.setState({
       filteredCard: filtered === undefined ? '' : filtered,
     });
