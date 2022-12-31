@@ -19,6 +19,7 @@ class App extends React.Component {
       isSaveButtonDisabled: true,
       hasTrunfo: false,
       savedCards: [],
+      filteredCard: undefined,
     };
     this.onInputChange = this.onInputChange.bind(this);
     this.validateSaveButton = this.validateSaveButton.bind(this);
@@ -26,6 +27,7 @@ class App extends React.Component {
     this.onDeleteButtonClick = this.onDeleteButtonClick.bind(this);
     this.handleHasTrunfo = this.handleHasTrunfo.bind(this);
     this.verifyHasTrunfo = this.verifyHasTrunfo.bind(this);
+    this.handleFilterName = this.handleFilterName.bind(this);
   }
 
   handleHasTrunfo() {
@@ -38,16 +40,29 @@ class App extends React.Component {
     }
   }
 
+  handleFilterName(e) {
+    const { value } = e.target;
+    const { savedCards } = this.state;
+    const filtered = savedCards.filter((card) => card.cardName.includes(value));
+    this.setState({
+      filteredCard: filtered === undefined ? '' : filtered,
+    });
+  }
+
   onInputChange({ target }) {
     const { value, name } = target;
-    this.setState({
-      [name]: name === 'cardTrunfo' ? target.checked : value,
-    }, this.validateSaveButton);
+    this.setState(
+      {
+        [name]: name === 'cardTrunfo' ? target.checked : value,
+      },
+      this.validateSaveButton,
+    );
   }
 
   onSaveButtonClick(e) {
     e.preventDefault();
-    const { cardName,
+    const {
+      cardName,
       cardDescription,
       cardAttr1,
       cardAttr2,
@@ -56,7 +71,8 @@ class App extends React.Component {
       cardRare,
       cardTrunfo,
     } = this.state;
-    const newCard = { cardName,
+    const newCard = {
+      cardName,
       cardDescription,
       cardAttr1,
       cardAttr2,
@@ -66,11 +82,12 @@ class App extends React.Component {
       cardTrunfo: cardTrunfo ? true : cardTrunfo,
     };
 
-    this.setState((prevState) => (
-      {
+    this.setState(
+      (prevState) => ({
         savedCards: [...prevState.savedCards, newCard],
-      }
-    ), this.verifyHasTrunfo);
+      }),
+      this.verifyHasTrunfo,
+    );
 
     this.setState({
       cardName: '',
@@ -89,9 +106,12 @@ class App extends React.Component {
     const { savedCards } = this.state;
     const { id } = target;
     const updatedSavedCards = savedCards.filter((card) => card.cardName !== id);
-    this.setState({
-      savedCards: updatedSavedCards,
-    }, this.handleHasTrunfo);
+    this.setState(
+      {
+        savedCards: updatedSavedCards,
+      },
+      this.handleHasTrunfo,
+    );
   }
 
   verifyHasTrunfo() {
@@ -136,13 +156,31 @@ class App extends React.Component {
     };
 
     this.setState({
-      isSaveButtonDisabled: !Object.values(validFields).every((value) => value === true),
+      isSaveButtonDisabled: !Object.values(validFields).every(
+        (value) => value === true,
+      ),
     });
   }
 
   render() {
-    const { onInputChange, onSaveButtonClick, onDeleteButtonClick } = this;
-    const { savedCards } = this.state;
+    const {
+      onInputChange,
+      onSaveButtonClick,
+      onDeleteButtonClick,
+      handleFilterName,
+    } = this;
+    const { savedCards, filteredCard } = this.state;
+    const savedCardsList = (list) => {
+      const output = list.map((card) => (
+        <Card
+          isSavedCard="true"
+          onDeleteButtonClick={ onDeleteButtonClick }
+          key={ card.cardName }
+          { ...card }
+        />
+      ));
+      return output;
+    };
     return (
       <div className="main-container">
         <h1 className="title">Tryunfo</h1>
@@ -156,13 +194,19 @@ class App extends React.Component {
           <Card { ...this.state } />
         </div>
         <div className="saved-cards">
-          {savedCards.map((card) => (
-            <Card
-              isSavedCard="true"
-              onDeleteButtonClick={ onDeleteButtonClick }
-              key={ card.cardName }
-              { ...card }
-            />))}
+          <div className="filter-container">
+            <span>Filtros de Busca</span>
+            <label htmlFor="filter-name">
+              <input
+                data-testid="name-filter"
+                placeholder="Nome da carta"
+                type="text"
+                onChange={ handleFilterName }
+              />
+            </label>
+          </div>
+          {filteredCard === undefined
+            ? savedCardsList(savedCards) : savedCardsList(filteredCard)}
         </div>
       </div>
     );
